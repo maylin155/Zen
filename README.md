@@ -1,6 +1,6 @@
 # ZEN APPLICATION
 
-Zen is a mental health care application that deals with mental health issues and provides tools for self-development, mental health resources , and providing professional support for mental health. This project is part of my final year work for Bachelor of Computing Science at Coventry Univeristy, aiming to integrate modern web technologies with a seamless user experience.
+Zen is a mental health care application that deals with mental health issues and provides tools for self-development, mental health resources , and providing professional support for mental health. This project is part of my final year work for Bachelor of Computing Science at Coventry University, aiming to integrate modern web technologies with a seamless user experience.
 
 ## Get started
 
