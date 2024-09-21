@@ -1,55 +1,40 @@
-# ZEN APPLICATION
+# Zen Application
 
-Zen is a mental health care application that deals with mental health issues and provides tools for self-development, mental health resources , and providing professional support for mental health. This project is part of my final year work for Bachelor of Computing Science at Coventry University, aiming to integrate modern web technologies with a seamless user experience.
+**Zen** is a mental health care application designed to help users manage their emotional well-being through self-development tools, mental assessments, and mental health support. The app provides a user-friendly platform to access professional help, self-guided tools like mood tracking and journaling, and a supportive community space.
 
-## Get started
+## Project Aims
 
-1. Install dependencies
+The primary aim of the Zen Application is to address mental health challenges and provide accessible tools for users to manage their emotional and psychological well-being. Key areas of focus include self-development, mental health assessments, and professional support.
 
-   ```bash
-   npm install
-   ```
+## Project Objectives
 
-2. Start the app
+- **Develop a mental health support platform**: Aimed at providing tools for users to manage their mental health.
+- **Offer user-centered features**: Including therapist booking, an AI-powered chatbot, and a community platform.
+- **Provide self-guided tools**: Such as journaling for emotional health management.
+- **Crisis support**: Offering emergency contacts and crisis management resources.
+- **User-friendly interface**: Designing an intuitive and engaging experience for users.
 
-   ```bash
-    npx expo start
-   ```
+## Features
 
-In the output, you'll find options to open the app in a
+- **Therapist Booking System**: Schedule appointments with licensed therapists.
+- **AI-Powered Chatbot**: Get real-time mental health support.
+- **Community Platform**: Connect with others in an online support community.
+- **Mood Tracking & Journaling**: Log mood changes and journal thoughts.
+- **Crisis Support**: Access emergency contacts and crisis resources.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Technologies Used
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Frontend**: React Native, Expo, NativeWind, Tailwind CSS, Expo Vector Icons
+- **Backend**: Firebase (Authentication, Firestore)
+- **Cloud**: Firebase Cloud Functions for backend logic
 
-## Get a fresh project
+## Usage
 
-When you're ready, run:
+- Sign up or log in to access the app's features.
+- Journal your thoughts
+- Book a session with a therapist or chat with the AI-powered assistant for getting resources.
+- Access crisis support and emergency contacts for immediate assistance.
 
-```bash
-npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Technolgies Used
-### Frontend
-React Native
-Expo
-NativeWind
-Tailwind CSS
-Expo Vector Icons
-
-### Backend
-Supabase
 
