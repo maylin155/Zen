@@ -11,66 +11,62 @@ import { cleanHTML } from '../services/postService';
 import { createPostLike, removePostLike } from '../services/postService';
 import { supabase } from '../lib/supabase';
 
-const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = true}) => {
+const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = true }) => {
+    const [likes, setLikes] = useState([]);
     const [liked, setLiked] = useState(false);
-    const [likesArray, setLikesArray] = useState(item?.likes || []);
 
-    let bodySource = cleanHTML(item?.body);    
+    let bodySource = cleanHTML(item?.body);
+    // console.log(item?.postLikes)
 
     useEffect(() => {
-     const userLiked = likesArray.some(like => like.userId === currentUser?.id);
-        setLiked(userLiked);
-    }, [likesArray, currentUser?.id]);
+        const postLikes = item?.postLikes || [];
+        setLikes(postLikes);
+        if (postLikes.some(like => like.userId === currentUser?.id)) {
+            setLiked(true); // Set liked to true if the user has already liked the post
+        } else {
+            setLiked(false);
+        }
+    }, [item?.postLikes]);
 
     const openPostDetails = () => {
-        // Handle post details navigation
-        if(!showMoreIcon) return null;
-        router.push({pathname: 'postDetails', params: {postId: item?.id}});
+        if (!showMoreIcon) return null;
+        router.push({ pathname: 'postDetails', params: { postId: item?.id } });
     };
 
     const onLike = async () => {
         if (liked) {
-            // User is trying to unlike the post
-            setLiked(false);
-            setLikesArray(likesArray.filter(like => like.userId !== currentUser?.id)); // Optimistically remove like
-    
-            const response = await removePostLike(item?.id, currentUser?.id);
-            console.log("Remove like response: ", response); 
-    
-            if (!response.success) {
-                // Revert the UI change if the unlike fails
+            // User wants to unlike the post
+            setLiked(false);  // Optimistically update the UI
+            let updatedLikes = likes.filter(like => like.userId !== currentUser?.id);
+            setLikes(updatedLikes);
+
+            let res = await removePostLike(item?.id, currentUser?.id);
+            // console.log("Remove Like:", res);
+            if (!res.success) {
+                Alert.alert("Post", "Something went wrong");
                 setLiked(true);
-                setLikesArray([...likesArray, { userId: currentUser?.id }]);
-                Alert.alert("Post", "Could not unlike the post");
+                setLikes([...likes, { userId: currentUser?.id }]);
             }
         } else {
-            // User is trying to like the post
-            setLiked(true);
-            setLikesArray([...likesArray, { userId: currentUser?.id }]); // Optimistically add like
-    
-            const data = {
-                userId: currentUser?.id,
-                postId: item?.id,
-            };
-    
-            const response = await createPostLike(data);
-            console.log("Create like response: ", response); // Log response for debugging
-    
-            if (!response.success) {
-                // Revert the UI change if the like fails
-                setLiked(false);
-                setLikesArray(likesArray.filter(like => like.userId !== currentUser?.id));
-                Alert.alert("Post", "Could not like the post");
+            // User wants to like the post
+            setLiked(true);  // Optimistically update the UI
+            let newLike = { userId: currentUser?.id, postId: item?.id };
+            setLikes([...likes, newLike]);
+
+            let res = await createPostLike(newLike);
+            // console.log("Added Like:", res);
+            if (!res.success) {
+                Alert.alert("Post", "Something went wrong");
+                setLiked(false);  // Revert the state in case of failure
+                setLikes(likes.filter(like => like.userId !== currentUser?.id));  // Remove the added like in case of failure
             }
         }
     };
 
-
     const createdAt = moment(item?.created_at).format('MMM D');
-    const comments = [];  // You can replace this with actual comment data
 
     return (
-        <View style={{ gap: 2, marginBottom: 15, borderRadius: 10, padding: 10, paddingVertical: 12, backgroundColor: 'white', borderWidth: 0.5, borderColor: '#dcdcdc', shadowColor: '#000', height: 435 }}>
+        <View style={{ gap: 10, marginBottom: 15, borderRadius: 10, padding: 10, paddingVertical: 12, backgroundColor: 'white', borderWidth: 0.5, borderColor: '#dcdcdc', shadowColor: '#000', flex: 1}}> 
             <View className="flex-row justify-between mb-3">
                 <View className="flex-row items-center gap-3">
                     <Avatar uri={item?.user?.image} size={40} />
@@ -82,16 +78,14 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                 {
                     showMoreIcon && (
                         <TouchableOpacity onPress={openPostDetails}>
-                        <MaterialCommunityIcons name="dots-horizontal" size={24} color="#55575c" />
-                    </TouchableOpacity>
+                            <MaterialCommunityIcons name="dots-horizontal" size={24} color="#55575c" />
+                        </TouchableOpacity>
                     )
                 }
-
-
             </View>
 
             <View className="flex-1">
-                <View className="max-h-10">
+                <View className="mb-3">
                     {item?.body && (
                         <RenderHtml
                             contentWidth={100}
@@ -107,7 +101,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                     />
                 )}
 
-                {item?.file && item?.file.includes('postVideos') && (
+                {/* {item?.file && item?.file.includes('postVideos') && (
                     <Video
                         style={{ height: 300, width: '100%', borderRadius: 8, borderColor: '#dcdcdc' }}
                         source={getSupabaseFileUrl(item?.file)}
@@ -115,7 +109,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                         resizeMode="cover"
                         isLooping
                     />
-                )}
+                )} */}
 
                 <View className="flex-row justify-between mt-4 items-center">
                     <View className="flex-row gap-2 items-center">
@@ -128,7 +122,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                         </TouchableOpacity>
 
                         <Text className="text-lg font-plight text-gray-500">
-                            {likesArray?.length}
+                            {likes?.length}
                         </Text>
                     </View>
 
@@ -138,7 +132,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                         </TouchableOpacity>
 
                         <Text className="text-lg font-plight text-gray-500">
-                            {item?.postComments[0].count}
+                            {item?.postComments[0]?.count || 0}
                         </Text>
                     </View>
                 </View>

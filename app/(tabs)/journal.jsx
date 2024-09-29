@@ -9,21 +9,13 @@ import { FetchJournals } from '../../services/journalService';
 import JournalCard from '../../components/JournalCard';
 import moment from 'moment';
 import { getUserData } from '../../services/userService';
+import { supabase } from '../../lib/supabase';
 
 const Journal = () => {
   const { user } = useAuth();
   const [journals, setJournals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false); // Refresh state
-
-  const handleJournalEvent = async (payload) => {
-    if (payload.eventType === 'INSERT' && payload?.new?.id) {
-      let newJournal = { ...payload.new };
-      let res = await getUserData(newJournal.userId);
-      newJournal.user = res.success ? res.data : {};
-      setJournals((prevJournals) => [newJournal, ...prevJournals]);
-    }
-  };
 
   const fetchJournals = async () => {
     if (!user) return;
@@ -46,12 +38,12 @@ const Journal = () => {
   };
 
   useEffect(() => {
-    fetchJournals();
-  }, [user]);
+    fetchJournals()
+  }, [])
 
   const groupJournalsByDate = (journals) => {
     return journals.reduce((groupedJournals, journal) => {
-      const journalDate = moment(journal.created_at).format('YYYY-MM-DD'); 
+      const journalDate = moment(journal.created_at).format('YYYY-MM-DD');
       if (!groupedJournals[journalDate]) {
         groupedJournals[journalDate] = [];
       }
@@ -62,7 +54,7 @@ const Journal = () => {
 
   const renderItem = ({ item }) => (
     <View>
-      <Text className="text-xl font-bold mb-4 text-primary">
+      <Text className="text-lg font-bold mb-4 text-primary">
         {moment(item.date).format('MMM DD, dddd')}
       </Text>
       {item.journals.map((journal) => (
@@ -87,7 +79,7 @@ const Journal = () => {
       <View className="flex-1 mx-4">
         {/* Header */}
         <View className="flex-row justify-between my-8 items-center">
-        <Text className="text-2xl font-psemibold text-gray-600">Hello, <Text className="text-primary">{user && user.name}</Text></Text>
+          <Text className="text-2xl font-psemibold text-gray-600">Hello, <Text className="text-primary">{user && user.name}</Text></Text>
           <Pressable onPress={() => router.push('/profile')}>
             <Avatar uri={user && user.image} size={50} rounded={30} />
           </Pressable>
@@ -98,6 +90,7 @@ const Journal = () => {
           text="How are you feeling today?"
           image={images.journal}
           onPress={() => router.push('/journalEditor')}
+          buttonText="Write Journal"
         />
 
         {/* Grouped Journals */}

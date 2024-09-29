@@ -59,6 +59,7 @@ const EditProfile = () => {
     setLoading(true);
 
     if(typeof image == 'object'){
+      setUserData({...currentUser, ...userData});
       //upload image
       let imageRes = await uploadFile('profiles', image?.uri , true);
       if(imageRes.success) userData.image = imageRes.data;

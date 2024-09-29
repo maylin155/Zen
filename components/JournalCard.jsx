@@ -3,9 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 const JournalCard = ({ item, currentUser }) => {
-    // Format the date and day of the week
-    const createdAtDate = moment(item?.created_at).format('MMM D');
-    const createdAtDay = moment(item?.created_at).format('dddd'); 
+
     const createdAtTime = moment(item?.created_at).format('h:mm A');            
 
     return (
@@ -20,8 +18,8 @@ const JournalCard = ({ item, currentUser }) => {
                     shadowOpacity: 0.2,
                     shadowRadius: 4,
                     elevation: 5}}>
-                <Text className="text-sm font-plight">{createdAtTime}</Text>
-                <Text className="text-lg text-gray-800 font-pregular">{item.body}</Text>
+                <Text className="text-[14px] font-plight">{createdAtTime}</Text>
+                <Text className="text-[16px] text-gray-800 font-pregular mt-2">{item.body}</Text>
             </View>
         </View>
     );

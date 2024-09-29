@@ -19,19 +19,21 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
+
   const handlePostEvent = async (payload) => {
     if (payload.eventType === 'INSERT' && payload?.new?.id) {
       let newPost = { ...payload.new };
       let res = await getUserData(newPost.userId);
       newPost.user = res.success ? res.data : {};
-      newPost.postComments = [{count: 0}];
-      setPosts((prevPosts) => [newPost, ...prevPosts]); // Add new posts at the top
-    }
+      newPost.postComments = [{ count: 0 }];
+      newPost.postLikes = [];
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
+    } 
   }
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await getPosts(true); // Fetch posts with refresh flag
+    await getPosts(true);
     setRefreshing(false);
   };
 
@@ -42,7 +44,7 @@ const Home = () => {
     let response = await fetchPosts(limit);
     if (response.success) {
       if (!refreshing && posts.length == response.data.length) setHasMore(false)
-      setPosts(refreshing ? response.data: response.data);
+      setPosts(refreshing ? response.data : response.data);
     }
   };
 
@@ -79,9 +81,7 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           renderItem={({ item }) => (
-            <View style={{ marginBottom: 1 }}>
-              <PostCard item={item} currentUser={user} router={router} commentCount={item.commentCount} />
-            </View>
+              <PostCard item={item} currentUser={user} router={router} />
           )}
           onEndReached={() => {
             getPosts();
@@ -96,7 +96,6 @@ const Home = () => {
               </View>
             )
           }
-        // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
 
         {/* Floating Plus Icon */}

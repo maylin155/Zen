@@ -1,11 +1,12 @@
-import { View, Text } from 'react-native'
+import { SafeAreaView, Text } from 'react-native'
 import React from 'react'
+import Chatbot from '../../components/Chatbot'
 
 const Chat = () => {
   return (
-    <View>
-      <Text>Chat</Text>
-    </View>
+    <SafeAreaView className="flex-1 mx-3">
+      <Chatbot />
+    </SafeAreaView>
   )
 }
 
