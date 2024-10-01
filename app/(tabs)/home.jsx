@@ -10,6 +10,8 @@ import Loading from '../../components/Loading';
 import { getUserData } from '../../services/userService';
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import SOSButton from '../../components/SOSButton';
+import * as Location from 'expo-location';
 
 
 var limit = 0;
@@ -18,7 +20,7 @@ const Home = () => {
   const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-
+  const [location, setLocation] = useState(null);
 
   const handlePostEvent = async (payload) => {
     if (payload.eventType === 'INSERT' && payload?.new?.id) {
@@ -53,11 +55,36 @@ const Home = () => {
       .channel('posts')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, handlePostEvent)
       .subscribe();
-
     return () => {
       supabase.removeChannel(postChannel);
     };
   }, []);
+
+  const handlePress = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Permission to access location was denied");
+      return;
+    }
+  
+    let currentLocation = await Location.getCurrentPositionAsync({});  // Corrected function name
+    let reverseGeocode = await Location.reverseGeocodeAsync({
+      latitude: currentLocation.coords.latitude,  // Corrected spelling
+      longitude: currentLocation.coords.longitude,
+    });
+  
+    if (reverseGeocode.length > 0) {
+      const countryName = reverseGeocode[0].country;
+      setLocation(countryName);
+
+      console.log(location);
+  
+      router.push({
+        pathname: '/hotline',
+        params: { country: countryName },
+      });
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -65,10 +92,15 @@ const Home = () => {
       <View className="mx-5 flex-1">
         {/* Header */}
         <View className="flex-row justify-between my-8 items-center">
-          <Text className="text-2xl font-psemibold text-gray-600">Hello, <Text className="text-primary">{user && user.name}</Text></Text>
+          <Text className="text-xl font-psemibold text-gray-600">Hello, <Text className="text-primary">{user && user.name}</Text></Text>
+          <View className="flex-row items-center">
           <Pressable onPress={() => router.push('/profile')}>
             <Avatar uri={user && user.image} size={50} rounded={30} />
           </Pressable>
+          <View className="ml-2">
+            <SOSButton onPress={handlePress}/>
+            </View>
+          </View>
         </View>
 
         {/* Posts */}

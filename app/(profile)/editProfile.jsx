@@ -43,6 +43,7 @@ const EditProfile = () => {
       quality: 0.7,
     });
 
+
     if (!result.canceled) {
       setUser({...user, image: result.assets[0]});
     }
@@ -74,8 +75,8 @@ const EditProfile = () => {
       setUserData({...currentUser, ...userData});
       router.back();
     }
-
   }
+  
   let imageSource = user.image && typeof user.image === 'object' ? user.image.uri : user.image 
 
   // console.log("user", user.image)

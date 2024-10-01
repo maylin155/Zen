@@ -11,12 +11,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to show your current position."
+      },
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["ACCESS_FINE_LOCATION"]
     },
     "web": {
       "bundler": "metro",
