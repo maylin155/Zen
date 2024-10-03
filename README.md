@@ -10,7 +10,7 @@ The primary aim of the Zen Application is to address mental health challenges an
 
 - **Develop a mental health support platform**: Aimed at providing tools for users to manage their mental health.
 - **Offer user-centered features**: Including therapist booking, an AI-powered chatbot, and a community platform.
-- **Provide self-guided tools**: Such as journaling for emotional health management.
+- **Provide self-guided tools**: Such as mood tracking and journaling for emotional health management.
 - **Crisis support**: Offering emergency contacts and crisis management resources.
 - **User-friendly interface**: Designing an intuitive and engaging experience for users.
 
@@ -31,9 +31,10 @@ The primary aim of the Zen Application is to address mental health challenges an
 ## Usage
 
 - Sign up or log in to access the app's features.
-- Journal your thoughts
+- Journal your thoughts and Mood Tracking
 - Book a session with a therapist or chat with the AI-powered assistant for getting resources.
 - Access crisis support and emergency contacts for immediate assistance.
+- User-friendly chatbot for emotional support
 
 
 
