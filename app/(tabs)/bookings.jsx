@@ -20,7 +20,7 @@ const Appointments = () => {
   };
 
   const handleBookingEvent = async (payload) => {
-    console.log("payload", payload);
+    // console.log("payload", payload);
     if(payload.eventType == 'DELETE' && payload.old.id){
       setAppointments(prevAppointments => {
         let updatedAppointments = prevAppointments.filter(booking => booking.id != payload.old.id)
@@ -54,7 +54,7 @@ const Appointments = () => {
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1 mx-4 mt-3">
-        <Header title="Upcoming Session" mb={24} />
+        <Text className="text-center text-lg font-psemibold text-gray-800">Upcoming Session</Text>
         <FlatList
           data={appointments}
           showsVerticalScrollIndicator={false}

@@ -37,7 +37,7 @@ const TabsLayout = () => {
             title: 'Therapy',
             headerShown: false,
             tabBarIcon: ({ color }) => (
-              <AntDesign name="calendar" size={24} color={color} />
+              <AntDesign name="team" size={24} color={color} />
             ),
           }}
         />
@@ -49,6 +49,17 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color }) => (
               <AntDesign name="book" size={24} color={color} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="bookings"
+          options={{
+            title: 'Booking',
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <AntDesign name="calendar" size={24} color={color} />
             ),
           }}
         />

@@ -65,3 +65,22 @@ export const removeBooking = async (bookingId) => {
     }
 };
 
+export const FetchExistingBooking = async (therapistId) => {
+    try {
+        const { data, error } = await supabase
+            .from('appointments')
+            .select()
+            .eq('therapistId', therapistId)  
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.log("Fetch Booking Error", error);
+            return { success: false, msg: "Could not fetch booking" };
+        }
+
+        return { success: true, data: data };
+    } catch (error) {
+        console.log("Catch Error", error);
+        return { success: false, msg: "Could not fetch booking" };
+    }
+};

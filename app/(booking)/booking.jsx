@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import SelectDropdown from 'react-native-select-dropdown';
 import CustomButton from '../../components/CustomButton';
-import { UpdateBooking } from '../../services/bookingService';
+import { FetchExistingBooking, UpdateBooking } from '../../services/bookingService';
 import Loading from '../../components/Loading';
 
 
@@ -18,9 +18,20 @@ const Booking = () => {
     const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [time, setTime] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [appointments, setAppointments] = useState([]);
 
-    // console.log(date)
-    // console.log(time)
+    // console.log(appointments);
+
+
+    const fetchAppointments = async () => {
+        const response = await FetchExistingBooking(therapistId);
+        if(response.success){
+            // console.log(response.data);
+            setAppointments(response.data)
+        } else {
+            Alert.alert("Error", response.msg)
+        }
+    }
 
     const timeSlot = [
         "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM"
@@ -29,6 +40,12 @@ const Booking = () => {
     const onSubmit = async () => {
         if (date == '' || time == null) {
             Alert.alert("Booking", "Please select a date and time.")
+        }
+
+        const isTimeTaken = appointments.some(appointment => appointment.time === time && appointment.date === date);
+        if (isTimeTaken){
+            Alert.alert("Error", "This time slot has already been taken. Please choose a different time.");
+            return;
         }
 
         let data = {
@@ -48,8 +65,12 @@ const Booking = () => {
         }
     }
 
+    useEffect(() => {
+        fetchAppointments();
+    }, [])
+
     return (
-        <SafeAreaView className="flex-1">
+        <SafeAreaView className="flex-1 bg-white">
             <ScrollView>
                 <View className="flex-1 mx-5">
                     <View className="my-5">
@@ -66,7 +87,9 @@ const Booking = () => {
                             date={dayjs(date).toDate()} // Convert formatted string back to a Date object
                             onChange={(params) => setDate(dayjs(params.date).format('YYYY-MM-DD'))} // Store formatted date
                             selectedItemColor='#8b86b2'
-                        />
+                            minDate={dayjs().startOf('day')}
+                            displayFullDays
+                            />
                     </View>
 
                     <View className="flex-row gap-3 items-center my-1">
@@ -94,8 +117,8 @@ const Booking = () => {
                                     shadowOpacity: 0.3,
                                     shadowRadius: 4,
                                     elevation: 4,
-                                    borderWidth: selectedItem ? 2 : 0, // Show border when selected
-                                    borderColor: selectedItem ? '#BEBAD6' : 'transparent', // Border color when selected
+                                    borderWidth: selectedItem ? 2 : 0,
+                                    borderColor: selectedItem ? '#BEBAD6' : 'transparent',
                                 };
 
                                 return (
@@ -104,7 +127,8 @@ const Booking = () => {
                                     </View>
                                 );
                             }}
-                            renderItem={(item, index, isSelected) => {
+                            renderItem={(item) => {
+                                const isTimeUnavailable = appointments.some(appointment => appointment.time === item && appointment.date ===date)
                                 return (
                                     <View
                                         style={{
@@ -114,7 +138,8 @@ const Booking = () => {
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             paddingVertical: 8,
-                                            backgroundColor: '#fff'
+                                            backgroundColor: 'white',
+                                            opacity: isTimeUnavailable ? 0.2 : 1
                                         }}
                                     >
                                         <Text>{item}</Text>

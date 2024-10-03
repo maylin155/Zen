@@ -3,6 +3,7 @@ import React from 'react'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import CustomButton from './CustomButton';
 import { router } from 'expo-router';
+import Avatar from './Avatar';
 
 const TherapistCard = ({ item, currentUser }) => {
 
@@ -17,7 +18,7 @@ const TherapistCard = ({ item, currentUser }) => {
   };
 
   return (
-    <View className="bg-white rounded-lg p-7 my-2 shadow-xs w-200 min-h-[220px]">
+    <View className="bg-white rounded-lg p-5 my-2 shadow-xs w-200 min-h-[220px]">
       <Text className="font-pregular text-[16px] text-gray-800">{item?.name}</Text>
       <Text className="font-pregular text-[16px] text-gray-500 mt-2">{item?.specialization}</Text>
       <Text className="font-pregular text-[14px] text-gray-600 mt-8">{item?.description}</Text>

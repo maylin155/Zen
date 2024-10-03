@@ -62,7 +62,7 @@ const Profile = () => {
         contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 1 }}>
+          <View style={{ marginBottom: 1, marginHorizontal: 15 }}>
             <PostCard item={item} currentUser={user} router={router} commentCount={item.commentCount} />
           </View>
         )}

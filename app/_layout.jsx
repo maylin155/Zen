@@ -85,12 +85,12 @@ const RootLayout = () => {
         presentation: 'modal'
       }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
       name="(journal)/journalEditor"
       options={{
         presentation: 'modal'
       }}
-      />
+      /> */}
     </Stack>
   );
 };

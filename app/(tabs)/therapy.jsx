@@ -39,7 +39,6 @@ const Therapy = () => {
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1 mx-5 mt-5">
-        <CheckInCard text="Have an appointment?" image={images.talk} buttonText="See More" onPress={() => router.push('/appointments')}/>
         <Text className="font-psemibold text-xl mt-4 text-gray-700">Find the Right Therapist</Text>
         <FlatList
           data={therapists}

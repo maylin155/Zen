@@ -61,12 +61,13 @@ const Chatbot = () => {
 
     return (
         <KeyboardAvoidingView
-            style={{ flex: 1 }}
+            style={{ flex: 1, paddingHorizontal: 20}}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={10} // Adjust as needed
         >
             <View style={{ flex: 1 }}>
                 <FlatList
+                showsVerticalScrollIndicator={false}
                     data={chat}
                     renderItem={renderChatItem}
                     keyExtractor={(item, index) => index.toString()}
@@ -77,7 +78,7 @@ const Chatbot = () => {
             <View style={{
                 padding: 10,
             }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 7 }}>
                     <TextInput
                         style={{
                             flex: 1,

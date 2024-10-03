@@ -12,7 +12,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import SOSButton from '../../components/SOSButton';
 import * as Location from 'expo-location';
-
+import MoodChart from '../../components/MoodChart';
+import { FetchMood } from '../../services/moodService';
+import QuoteCard from '../../components/QuoteCard';
+import { ScrollView } from 'react-native';
 
 var limit = 0;
 const Home = () => {
@@ -21,6 +24,42 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [location, setLocation] = useState(null);
+  const [moodValues, setMoodValues] = useState([0,0,0,0,0,0,0]);
+  const [averageMood, setAverageMood] = useState(0);
+  const [motivationalMessage, setMotivationalMessage] = useState("");
+
+  const calculateAverageMood = (moodValues) => {
+
+    const sum = moodValues.reduce((acc, value) => acc + value, 0);
+    const average = sum / moodValues.length;
+    setAverageMood(average);
+
+    // Update motivational message based on average mood
+    if (average < 2) {
+      setMotivationalMessage("Feeling down? Remember, tough times never last, but tough people do.");
+    } else if (average >= 2 && average < 4) {
+      setMotivationalMessage("You're doing fine! Keep going, don't give up!");
+    } else {
+      setMotivationalMessage("Great job! Keep up the positive mood!");
+    }
+  };
+  console.log(averageMood);
+  console.log(motivationalMessage)
+
+  const fetchMoodData = async () => {
+    const response = await FetchMood(user?.id);
+    if (response.success) {
+      const updatedMoodValues = new Array(7).fill(0);
+
+      response.data.forEach(entry => {
+        const date = new Date(entry.created_at);
+        const dayOfWeek = (date.getUTCDay() + 6) % 7;
+        updatedMoodValues[dayOfWeek] = Math.max(updatedMoodValues[dayOfWeek], entry.moodValue);
+      });
+      setMoodValues(updatedMoodValues);
+      calculateAverageMood(updatedMoodValues);
+    }
+  };
 
   const handlePostEvent = async (payload) => {
     if (payload.eventType === 'INSERT' && payload?.new?.id) {
@@ -30,7 +69,22 @@ const Home = () => {
       newPost.postComments = [{ count: 0 }];
       newPost.postLikes = [];
       setPosts((prevPosts) => [newPost, ...prevPosts]);
-    } 
+    }
+  }
+
+  const handleMoodEvent = async (payload) => {
+    if (payload.eventType === 'INSERT' && payload?.new?.id) {
+      // console.log(payload)
+      const newMood = payload.new;
+      const date = new Date(newMood.created_at);
+      const dayOfWeek = (date.getUTCDay() + 6) % 7;
+
+      setMoodValues(prevMoodValues => {
+        const updatedMoodValues = [...prevMoodValues];
+        updatedMoodValues[dayOfWeek] = Math.max(updatedMoodValues[dayOfWeek], newMood.moodValue);
+        return updatedMoodValues;
+      })
+    }
   }
 
   const onRefresh = async () => {
@@ -51,12 +105,18 @@ const Home = () => {
   };
 
   useEffect(() => {
+    fetchMoodData();
     let postChannel = supabase
       .channel('posts')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, handlePostEvent)
       .subscribe();
+    let moodChannel = supabase
+      .channel('mood')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'mood' }, handleMoodEvent)
+      .subscribe();
     return () => {
       supabase.removeChannel(postChannel);
+      supabase.removeChannel(moodChannel);
     };
   }, []);
 
@@ -66,19 +126,19 @@ const Home = () => {
       Alert.alert("Permission to access location was denied");
       return;
     }
-  
-    let currentLocation = await Location.getCurrentPositionAsync({});  // Corrected function name
+
+    let currentLocation = await Location.getCurrentPositionAsync({});
     let reverseGeocode = await Location.reverseGeocodeAsync({
-      latitude: currentLocation.coords.latitude,  // Corrected spelling
+      latitude: currentLocation.coords.latitude,
       longitude: currentLocation.coords.longitude,
     });
-  
+
     if (reverseGeocode.length > 0) {
       const countryName = reverseGeocode[0].country;
       setLocation(countryName);
 
       console.log(location);
-  
+
       router.push({
         pathname: '/hotline',
         params: { country: countryName },
@@ -94,17 +154,26 @@ const Home = () => {
         <View className="flex-row justify-between my-8 items-center">
           <Text className="text-xl font-psemibold text-gray-600">Hello, <Text className="text-primary">{user && user.name}</Text></Text>
           <View className="flex-row items-center">
-          <Pressable onPress={() => router.push('/profile')}>
-            <Avatar uri={user && user.image} size={50} rounded={30} />
-          </Pressable>
-          <View className="ml-2">
-            <SOSButton onPress={handlePress}/>
+            <Pressable onPress={() => router.push('/profile')}>
+              <Avatar uri={user && user.image} size={50} rounded={30} />
+            </Pressable>
+            <View className="ml-2">
+              <SOSButton onPress={handlePress} />
             </View>
           </View>
         </View>
 
+
         {/* Posts */}
         <FlatList
+          ListHeaderComponent={(
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 10, justifyContent: 'center'}}>
+              <View className="items-center flex-row align-center">
+              <MoodChart moodValues={moodValues} />
+              <QuoteCard quote={motivationalMessage} />
+                </View> 
+            </ScrollView>
+          )}
           data={posts}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
@@ -113,7 +182,7 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           renderItem={({ item }) => (
-              <PostCard item={item} currentUser={user} router={router} />
+            <PostCard item={item} currentUser={user} router={router} />
           )}
           onEndReached={() => {
             getPosts();

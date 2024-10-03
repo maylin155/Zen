@@ -22,7 +22,7 @@ const JournalEditor = () => {
     const onSubmit = async () => {
         if (body === '') {
             Alert.alert("Error", "Empty Journal");
-            return; // Early return if body is empty
+            return;
         }
 
         let data = {
