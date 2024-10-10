@@ -60,7 +60,7 @@ const Journal = () => {
       date,
       journals: combined[date].journals,
       moods: combined[date].moods,
-    })).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date
+    })).sort((a, b) => new Date(b.date) - new Date(a.date)); 
   };
 
   // Fetch data on component mount
@@ -100,39 +100,39 @@ const Journal = () => {
           </View>
         ) : (
           <FlatList
-            data={data}
-            keyExtractor={(item) => item.date}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
-            ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          />
-        )}
-        
-        {/* Floating Plus Icon */}
-        <TouchableOpacity
-          onPress={() => {
-            router.push('moodSlider');
-          }}
-          style={{
-            position: 'absolute',
-            width: 60,
-            height: 60,
-            alignItems: 'center',
-            justifyContent: 'center',
-            right: -5,
-            bottom: 30,
-            elevation: 10,
-          }}
-        >
-          <AntDesign name="pluscircle" size={50} color="#6575A8" />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-};
+              data={data}
+              keyExtractor={(item) => item.date}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
+              ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            />
+          )}
+          
+          {/* Floating Plus Icon */}
+          <TouchableOpacity
+            onPress={() => {
+              router.push('moodSlider');
+            }}
+            style={{
+              position: 'absolute',
+              width: 60,
+              height: 60,
+              alignItems: 'center',
+              justifyContent: 'center',
+              right: -5,
+              bottom: 30,
+              elevation: 10,
+            }}
+          >
+            <AntDesign name="pluscircle" size={50} color="#6575A8" />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  };
 
-export default Journal;
+  export default Journal;

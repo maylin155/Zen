@@ -44,12 +44,12 @@ const RootLayout = () => {
       // Set up auth state change listener
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         if (session) {
-          setAuth(session?.user); // Set user in context
+          setAuth(session?.user); 
           updatedUserData(session?.user, session?.user.email); // Fetch user data
           router.replace('/home'); // Navigate to home screen
         } else {
           setAuth(null); // Clear user in context
-          router.push('/'); // Navigate to the welcome page or auth screen
+          router.push('/');
         }
       });
 

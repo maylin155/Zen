@@ -16,6 +16,7 @@ import MoodChart from '../../components/MoodChart';
 import { FetchMood } from '../../services/moodService';
 import QuoteCard from '../../components/QuoteCard';
 import { ScrollView } from 'react-native';
+import axois from 'axios'
 
 var limit = 0;
 const Home = () => {
@@ -27,6 +28,7 @@ const Home = () => {
   const [moodValues, setMoodValues] = useState([0,0,0,0,0,0,0]);
   const [averageMood, setAverageMood] = useState(0);
   const [motivationalMessage, setMotivationalMessage] = useState("");
+  
 
   const calculateAverageMood = (moodValues) => {
 
@@ -43,8 +45,8 @@ const Home = () => {
       setMotivationalMessage("Great job! Keep up the positive mood!");
     }
   };
-  console.log(averageMood);
-  console.log(motivationalMessage)
+  // console.log(averageMood);
+  // console.log(motivationalMessage)
 
   const fetchMoodData = async () => {
     const response = await FetchMood(user?.id);
@@ -137,7 +139,7 @@ const Home = () => {
       const countryName = reverseGeocode[0].country;
       setLocation(countryName);
 
-      console.log(location);
+      // console.log(location);
 
       router.push({
         pathname: '/hotline',

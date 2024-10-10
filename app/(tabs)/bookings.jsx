@@ -55,18 +55,26 @@ const Appointments = () => {
     <SafeAreaView className="flex-1">
       <View className="flex-1 mx-4 mt-3">
         <Text className="text-center text-lg font-psemibold text-gray-800">Upcoming Session</Text>
-        <FlatList
-          data={appointments}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={{ marginBottom: 1, marginTop: 4 }}>
-              <BookingCard item={item} currentUser={user} onBookingDeleted={handleBookingDeleted} />
-            </View>
-          )}
-        />
+        {appointments.length === 0 ?
+        (
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-center text-gray-800 font-pregular text-lg">No upcoming appointments.</Text>
+          </View>
+
+        ) : (
+          <FlatList
+            data={appointments}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 4 }}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={{ marginBottom: 1, marginTop: 4 }}>
+                <BookingCard item={item} currentUser={user} onBookingDeleted={handleBookingDeleted} />
+              </View>
+            )}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

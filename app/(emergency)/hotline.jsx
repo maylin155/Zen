@@ -52,6 +52,10 @@ const hotlines = {
   'Singapore': {
     name: "Samaritans of Singapore (SOS)",
     number: "1800-221-4444",
+  },
+  'Thailand' : {
+    name: 'Social Assistance Center',
+    number: '1300'
   }
 };
 

@@ -26,7 +26,7 @@ const FormField = ({ title = '', value, placeholder, handleChangeText, otherStyl
             flex: 1,
             color: '#000',
             fontSize: 16,
-            fontWeight: '600',
+            fontWeight: 600,
           }}
           value={value}
           placeholder={placeholder}
