@@ -36,6 +36,10 @@ The primary aim of the Zen Application is to address mental health challenges an
 - Access crisis support and emergency contacts for immediate assistance.
 - User-friendly chatbot for emotional support
 
+![Screenshot from 2024-11-07 02-00-31](https://github.com/user-attachments/assets/a6d8aa52-62b9-46cf-89fd-60ca57bf0328)
 
+![Screenshot from 2024-11-07 02-01-09](https://github.com/user-attachments/assets/3774f445-093b-4d82-b171-017d9d643acf)
 
+![Screenshot from 2024-11-07 02-01-43](https://github.com/user-attachments/assets/cb2a09b7-1a44-4862-8547-ad6d02c208fd)
 
+![Screenshot from 2024-11-07 02-02-10](https://github.com/user-attachments/assets/4be6de13-1e66-4c29-9151-e5a922b55a17)
