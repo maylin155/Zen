@@ -25,8 +25,7 @@ The primary aim of the Zen Application is to address mental health challenges an
 ## Technologies Used
 
 - **Frontend**: React Native, Expo, NativeWind, Tailwind CSS, Expo Vector Icons
-- **Backend**: Firebase (Authentication, Firestore)
-- **Cloud**: Firebase Cloud Functions for backend logic
+- **Backend**: Supabase
 
 ## Usage
 
